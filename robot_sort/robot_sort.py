@@ -91,13 +91,27 @@ class SortingRobot:
         Returns True if the robot's light is on and False otherwise.
         """
         return self._light == "ON"
+    
+    def pickup_item(self):
+        if self._item is not None:
+            self.swap_item
+        else:
+            self._item = self._list[self._position]
+            self._list.pop(self._position)
 
     def sort(self):
-        """
-        Sort the robot's list.
-        """
-        # Fill this out
-        pass
+        while(self.can_move_right()):
+            self.pickup_item()
+            if(self.compare_item() == 1):
+                self.move_right()
+                self.swap_item()
+            else:
+                self.move_left()
+        
+                
+            
+
+        
 
 
 if __name__ == "__main__":
@@ -105,8 +119,33 @@ if __name__ == "__main__":
     # with `python robot_sort.py`
 
     l = [15, 41, 58, 49, 26, 4, 28, 8, 61, 60, 65, 21, 78, 14, 35, 90, 54, 5, 0, 87, 82, 96, 43, 92, 62, 97, 69, 94, 99, 93, 76, 47, 2, 88, 51, 40, 95, 6, 23, 81, 30, 19, 25, 91, 18, 68, 71, 9, 66, 1, 45, 33, 3, 72, 16, 85, 27, 59, 64, 39, 32, 24, 38, 84, 44, 80, 11, 73, 42, 20, 10, 29, 22, 98, 17, 48, 52, 67, 53, 74, 77, 37, 63, 31, 7, 75, 36, 89, 70, 34, 79, 83, 13, 57, 86, 12, 56, 50, 55, 46]
-
     robot = SortingRobot(l)
 
     robot.sort()
     print(robot._list)
+
+
+"""
+        Pseudocode:
+        1. Move right one position and pick up the element
+        2. Compare the element in hand to the element in front of it
+        3. If hand is bigger than element in front, insert hand into position in front of robot and return to step 1
+        4. If element in front is larger than hand, move left 1 position, and return to step 3 (doing
+        this will move the item into a position in the array where the left element will be smaller
+        and the right element will be larger)
+        5. Return to step 1, and continue steps 1-5 until you cannot step right anymore
+        6. Append the last element (should be hand at this point) to the end of the list
+
+
+        something along the lines of 
+        self.pickup_item()
+        while(can_move_right):
+            compareitems
+            if hand > item:
+                moveright()
+                swapitem()
+            if item < hand:
+                moveleft
+            moveright()
+
+"""
